@@ -118,8 +118,10 @@ reviews:
           `.github/pull_request_template.md`); if the repository has none, use the org default
           template from `harvester/.github`, whose sections are `Problem`, `Solution`,
           `Related Issue(s)` and `Test plan`.
-          Pass if the PR description keeps every section heading of that template and each
-          section has non-placeholder content. Fail otherwise.
+          Pass if the PR description keeps the template's section headings and the required
+          sections (`Problem`, `Solution`, `Related Issue(s)`, `Test plan`) have non-placeholder
+          content; HTML comments count as placeholders. Optional sections such as
+          `Additional documentation or context` may be empty. Fail otherwise.
 
 chat:
   auto_reply: true
