@@ -110,6 +110,15 @@ reviews:
           `Issue harvester/<repo>#<number>`, or `Issue <issue URL>`.
           Fail if no issue is referenced, or if a closing keyword such as `Fixes`, `Closes`
           or `Resolves` is used to reference the issue.
+      - name: "PR template sections"
+        mode: warning
+        instructions: |
+          Use the repository's PR template (`.github/PULL_REQUEST_TEMPLATE.md` or
+          `.github/pull_request_template.md`); if the repository has none, use the org default
+          template from `harvester/.github`, whose sections are `Problem`, `Solution`,
+          `Related Issue(s)` and `Test plan`.
+          Pass if the PR description keeps every section heading of that template and each
+          section has non-placeholder content. Fail otherwise.
 
 chat:
   auto_reply: true
@@ -123,6 +132,7 @@ knowledge_base:
       - ".github/copilot-instructions.md"
       - ".github/instructions/**/*.instructions.md"
       - "CONTRIBUTING.md"
+      - "DEVELOPER_GUIDE.md"
       # Org-wide guidance maintained in harvester/harvester (read from its default branch).
       # AGENTS.md and copilot-instructions.md there are API-server specific and are not shared.
       - "harvester:CONTRIBUTING.md"
