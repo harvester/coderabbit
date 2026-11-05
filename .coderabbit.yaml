@@ -122,6 +122,11 @@ knowledge_base:
       - ".github/copilot-instructions.md"
       - ".github/instructions/**/*.instructions.md"
       - "CONTRIBUTING.md"
+      # Org-wide guidance maintained in harvester/harvester (read from its default branch).
+      # AGENTS.md and copilot-instructions.md there are API-server specific and are not shared.
+      - "harvester:CONTRIBUTING.md"
+      - "harvester:DEVELOPER_GUIDE.md"
+      - "harvester:.github/instructions/**/*.instructions.md"
   learnings:
     scope: auto
   issues:
