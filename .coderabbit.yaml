@@ -1,0 +1,128 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# Organization-wide CodeRabbit configuration for the harvester org.
+# Applies to every repo without its own .coderabbit.yaml. Repos that add their own file
+# should set `inheritance: true` to merge with (rather than replace) these defaults.
+# Reference: https://docs.coderabbit.ai/configuration/central-configuration
+language: en-US
+early_access: false
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  high_level_summary_in_walkthrough: true
+  review_status: true
+  collapse_walkthrough: true
+  changed_files_summary: true
+  sequence_diagrams: true
+  estimate_code_review_effort: true
+  assess_linked_issues: true
+  related_issues: true
+  related_prs: true
+  suggested_labels: false
+  auto_apply_labels: false
+  suggested_reviewers: false
+  auto_assign_reviewers: false
+  in_progress_fortune: false
+  poem: false
+  abort_on_close: true
+
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+    # The default branch is always reviewed; also review release branches (e.g. v1.9, v1.10).
+    base_branches:
+      - "^v\\d+\\.\\d+$"
+    ignore_title_keywords:
+      - "WIP"
+      - "DO NOT MERGE"
+    # Dependency bumps and automated backports are gated by CI/mergify.
+    ignore_usernames:
+      - "renovate[bot]"
+      - "mergify[bot]"
+      - "dependabot[bot]"
+
+  path_filters:
+    - "!vendor/**"
+    - "!**/zz_generated*.go"
+    - "!**/*_generated.go"
+    - "!go.sum"
+
+  path_instructions:
+    - path: "**/*.go"
+      instructions: |
+        - Code must pass the repo's golangci-lint configuration and be gofmt-formatted.
+        - Errors must be handled; flag errors discarded with `_` or ignored return values.
+        - Flag use of deprecated packages and goroutines/contexts without cancellation.
+    - path: "**/*_test.go"
+      instructions: |
+        - Prefer table-driven tests with `t.Run(tc.name, ...)` and `testify/assert` / `require`.
+        - Unit tests must not depend on a real Kubernetes API; use fake clients.
+    - path: "**/*.sh"
+      instructions: |
+        - Check quoting, `set -e` / `set -o pipefail`, injection via unquoted variables,
+          unsafe temp files, and `curl | sh` patterns.
+    - path: "**/Dockerfile*"
+      instructions: |
+        - Pin base images, avoid running as root where possible, and keep multi-stage builds lean.
+    - path: ".github/workflows/**"
+      instructions: |
+        - Pin third-party actions to a commit SHA, use least-privilege `permissions`, and avoid
+          script injection via untrusted `${{ github.event.* }}` inputs.
+
+  tools:
+    golangci-lint:
+      enabled: true
+    shellcheck:
+      enabled: true
+    hadolint:
+      enabled: true
+    yamllint:
+      enabled: true
+    actionlint:
+      enabled: true
+    gitleaks:
+      enabled: true
+    markdownlint:
+      enabled: true
+    languagetool:
+      enabled: false
+
+  pre_merge_checks:
+    docstrings:
+      mode: "off"
+    title:
+      mode: warning
+      requirements: |
+        Title should be concise and describe the change. Conventional prefixes such as
+        `feat:`, `fix:`, `chore:`, `refactor:`, `test:`, `docs:` or `dependencies:` are encouraged.
+    description:
+      mode: warning
+    issue_assessment:
+      mode: warning
+    custom_checks:
+      - name: "Linked issue reference"
+        mode: warning
+        instructions: |
+          Pass if the PR description references a related issue using `Issue #<number>`,
+          `Issue harvester/<repo>#<number>`, or `Issue <issue URL>`.
+          Fail if no issue is referenced, or if a closing keyword such as `Fixes`, `Closes`
+          or `Resolves` is used to reference the issue.
+
+chat:
+  auto_reply: true
+  art: false
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "**/AGENTS.md"
+      - ".github/copilot-instructions.md"
+      - ".github/instructions/**/*.instructions.md"
+      - "CONTRIBUTING.md"
+  learnings:
+    scope: auto
+  issues:
+    scope: auto
