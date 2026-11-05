@@ -38,8 +38,9 @@ reviews:
     ignore_title_keywords:
       - "WIP"
       - "DO NOT MERGE"
-    # Dependency bumps and automated backports are gated by CI/mergify.
+    # Dependency/version bumps and automated backports are gated by CI/mergify.
     ignore_usernames:
+      - "harvesterhci-io-github-bot"
       - "renovate[bot]"
       - "mergify[bot]"
       - "dependabot[bot]"
